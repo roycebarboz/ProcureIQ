@@ -1,0 +1,162 @@
+PROCUREIQ SUPPLIER RISK POLICY v2.0
+Effective Date: January 1, 2025
+Approved by: Chief Procurement Officer
+
+1. PURPOSE AND SCOPE
+
+1.1 Purpose.
+This policy establishes requirements for assessing, managing, and monitoring supplier risk across ProcureIQ's vendor ecosystem. It applies to all vendors and contractors engaged by ProcureIQ or on behalf of ProcureIQ's federal clients.
+
+1.2 Scope.
+This policy applies to:
+(a) All new vendor engagements regardless of spend amount;
+(b) Existing vendors at contract renewal;
+(c) Vendors undergoing significant changes in ownership, financial status, or service delivery.
+
+2. SPEND THRESHOLDS AND REVIEW REQUIREMENTS
+
+2.1 Risk Tier Classification.
+Vendors are classified into risk tiers based on annual spend and data sensitivity:
+
+(a) Tier 1 — Critical Vendors: Annual spend exceeding $500,000 OR vendors with access to sensitive federal data. Requires full risk assessment, annual on-site audit, and quarterly monitoring.
+(b) Tier 2 — High-Value Vendors: Annual spend $100,000–$499,999. Requires standard risk assessment, annual desk review, and semi-annual monitoring.
+(c) Tier 3 — Standard Vendors: Annual spend $25,000–$99,999. Requires basic risk screening and annual attestation.
+(d) Tier 4 — Low-Value Vendors: Annual spend below $25,000. Requires sanctions screening and basic qualification only.
+
+2.2 Enhanced Review Triggers.
+Regardless of tier, enhanced review is required when:
+(a) Credit rating downgrade to below investment grade (BB+ or equivalent);
+(b) Public reports of regulatory investigation or enforcement action;
+(c) Change of control or acquisition by foreign entity;
+(d) Discovery of OFAC sanctions violations or debarment;
+(e) Data breach or security incident affecting ProcureIQ or client data.
+
+3. DATA PROTECTION AND HANDLING REQUIREMENTS
+
+3.1 Data Processing Agreement (DPA) Requirements.
+All vendors with access to personal data or federal Controlled Unclassified Information (CUI) must execute a Data Processing Agreement (DPA) before engagement. The DPA must specify:
+(a) Purpose limitation: Data used only for contracted services;
+(b) Data minimization: Only minimum necessary data collected and processed;
+(c) Storage limitation: Data retained only as long as necessary;
+(d) Security measures: Technical and organizational security controls required;
+(e) Sub-processor restrictions: Sub-processor engagement requires prior written approval.
+
+3.2 Vendor Access Controls.
+Vendors accessing ProcureIQ systems or federal client data must implement:
+(a) Multi-factor authentication (MFA) for all system access;
+(b) Role-based access control (RBAC) with least-privilege principles;
+(c) Comprehensive audit logging of all data access activities;
+(d) Encrypted transmission for all data in transit (TLS 1.2 minimum);
+(e) Encryption at rest for all stored sensitive data.
+
+3.3 Data Breach Notification.
+Vendors must notify ProcureIQ within 24 hours of discovering any actual or suspected data breach. The notification must include:
+(a) Nature and scope of the breach;
+(b) Data categories and estimated number of records affected;
+(c) Immediate containment actions taken;
+(d) Contact information for the vendor's incident response team.
+
+3.4 DPA Violations.
+Material violations of DPA requirements constitute grounds for immediate contract termination. DPA violations are classified as blocking risk factors in ProcureIQ's risk assessment framework.
+
+4. DIVERSITY AND SMALL BUSINESS TARGETS
+
+4.1 Subcontracting Goals.
+Prime vendors on contracts valued above $750,000 must submit Small Business Subcontracting Plans with the following minimum targets:
+(a) Small Business (SB): 25% of subcontract dollars;
+(b) Small Disadvantaged Business (SDB): 10% of subcontract dollars;
+(c) Women-Owned Small Business (WOSB): 5% of subcontract dollars;
+(d) HUBZone Small Business: 3% of subcontract dollars;
+(e) Service-Disabled Veteran-Owned Small Business (SDVOSB): 3% of subcontract dollars.
+
+4.2 Reporting and Compliance.
+(a) Vendors must submit quarterly diversity subcontracting reports;
+(b) Failure to meet targets in two consecutive quarters triggers corrective action review;
+(c) Persistent non-compliance (three or more consecutive quarters) may result in contract termination for default.
+
+4.3 Diversity Risk Classification.
+Failure to meet diversity subcontracting requirements is classified as an advisory risk factor unless the vendor is also non-compliant with applicable regulatory requirements, in which case it escalates to a blocking factor.
+
+5. SLA MINIMUMS AND LIABILITY CAPS
+
+5.1 Minimum SLA Requirements.
+All Tier 1 and Tier 2 vendors must meet the following minimum service level agreements:
+(a) System uptime: 99.5% monthly availability for Tier 1; 99.0% for Tier 2;
+(b) Incident response: P1 incidents acknowledged within 1 hour, resolved within 4 hours;
+(c) P2 incidents acknowledged within 4 hours, resolved within 24 hours;
+(d) Planned maintenance: minimum 72 hours advance notice;
+(e) Recovery Time Objective (RTO): 4 hours for Tier 1 systems; 8 hours for Tier 2.
+
+5.2 SLA Measurement.
+(a) Uptime is calculated as: (Total minutes in month - downtime minutes) / Total minutes in month × 100;
+(b) Scheduled maintenance windows excluded from uptime calculation if properly notified;
+(c) Vendor must provide monthly SLA performance reports.
+
+5.3 Remedies for SLA Breach.
+(a) Service credits apply for availability below minimums: 10% monthly fee credit per 0.5% availability below minimum;
+(b) Persistent SLA failures (3+ consecutive months below minimums) constitute grounds for termination for default;
+(c) SLA breach does not limit other remedies available under the contract.
+
+5.4 Liability Caps.
+(a) Vendor liability for direct damages is capped at 12 months of fees paid in the preceding year;
+(b) Liability cap does not apply to: data breaches caused by vendor negligence, violations of DPA obligations, violations of applicable law, or indemnification obligations;
+(c) Liability for DPA violations and data breaches is uncapped where required by applicable law.
+
+6. SANCTIONS AND DEBARMENT SCREENING
+
+6.1 Pre-Engagement Screening.
+All vendors must be screened prior to engagement against:
+(a) OFAC Specially Designated Nationals (SDN) and Blocked Persons List;
+(b) SAM Excluded Parties List (debarred, suspended, ineligible contractors);
+(c) BIS Entity List and Denied Persons List;
+(d) Other applicable sanctions lists.
+
+6.2 Ongoing Screening.
+Critical (Tier 1) vendors are screened monthly. All other vendors are screened at contract renewal and upon any change of control notification.
+
+6.3 Sanctions Violations.
+Discovery that a vendor is subject to OFAC sanctions, debarment, or is otherwise excluded constitutes a blocking risk factor requiring immediate escalation to the Chief Procurement Officer and Legal Counsel. Engagement must cease immediately pending legal review.
+
+7. VENDOR FINANCIAL STABILITY
+
+7.1 Financial Assessment Requirements.
+Financial assessment for Tier 1 and Tier 2 vendors must include:
+(a) Review of most recent two years of audited financial statements;
+(b) Credit rating from at least one recognized agency (S&P, Moody's, Fitch);
+(c) Review of material litigation and regulatory actions;
+(d) Cash flow analysis for the most recent fiscal year.
+
+7.2 Financial Distress Indicators.
+The following indicators trigger immediate escalated review:
+(a) Credit rating downgrade to non-investment grade (below BBB-);
+(b) Net losses in two consecutive fiscal years;
+(c) Debt-to-equity ratio exceeding 3.0;
+(d) Going concern opinion in auditor's report;
+(e) Bankruptcy filing or restructuring.
+
+7.3 Financial Risk Classification.
+(a) Vendor financial distress is classified as blocking risk where the vendor's ability to perform is materially impaired;
+(b) Early warning indicators are classified as advisory risk pending further assessment.
+
+8. RISK ASSESSMENT AND SCORING
+
+8.1 Risk Scoring.
+Vendors receive a composite risk score (0–10) based on weighted factors:
+(a) Financial stability: 25% weight;
+(b) Security posture: 25% weight;
+(c) Compliance status: 20% weight;
+(d) Performance history: 15% weight;
+(e) Supply chain exposure: 15% weight.
+
+8.2 Blocking Factors.
+The following factors automatically result in a risk classification of "Reject" regardless of composite score:
+(a) Active OFAC sanctions or debarment;
+(b) Unresolved material DPA violations;
+(c) Confirmed data breach with evidence of negligence;
+(d) Criminal conviction of key principals related to contract performance.
+
+8.3 Risk Thresholds.
+(a) Score 0–3: Approve — proceed with standard monitoring;
+(b) Score 4–6: Escalate — enhanced monitoring and risk mitigation required;
+(c) Score 7–10: Reject — do not engage or escalate to CPO for exception approval;
+(d) Any blocking factor present: Reject regardless of numerical score.

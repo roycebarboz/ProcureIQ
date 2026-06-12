@@ -1,0 +1,110 @@
+OMB CIRCULAR A-123 — MANAGEMENT'S RESPONSIBILITY FOR ENTERPRISE RISK MANAGEMENT AND INTERNAL CONTROL
+
+PART I — INTRODUCTION
+
+1. Background.
+Management's Responsibility for Enterprise Risk Management and Internal Control establishes policy requirements and provides guidance to federal managers on improving accountability and effectiveness of federal programs and operations through implementation of enterprise risk management (ERM) and internal controls.
+
+2. Applicability.
+This Circular applies to all executive branch agencies, and includes requirements for agency heads, Chief Financial Officers, Chief Risk Officers, and program managers. Provisions apply to contractors and vendors processing federal funds or data when designated as critical suppliers.
+
+3. Purpose.
+This Circular requires agencies to:
+(a) Implement ERM processes to manage risks across the enterprise;
+(b) Maintain effective systems of internal control;
+(c) Evaluate risks from vendors, contractors, and third parties;
+(d) Report on internal control effectiveness.
+
+PART II — ENTERPRISE RISK MANAGEMENT
+
+4. ERM Framework.
+ERM is a process that integrates risk considerations into strategic planning, operations, and budget processes. Key components include:
+
+4.1 Risk Identification.
+Agencies must identify risks that could affect achievement of strategic objectives. Risk categories include:
+(a) Strategic risks: risks affecting mission and objectives;
+(b) Operational risks: risks affecting day-to-day operations, including vendor and contractor performance;
+(c) Financial risks: risks affecting financial integrity, including vendor financial stability;
+(d) Compliance risks: risks of violating laws, regulations, and policies;
+(e) Reputational risks: risks affecting public trust.
+
+4.2 Risk Assessment.
+Agencies must assess the likelihood and impact of identified risks. Risk assessment for vendors and contractors should include:
+(a) Financial stability assessment: review of financial statements, credit ratings, and indicators of financial distress;
+(b) Compliance assessment: review of contractor compliance history, including debarment status and past performance;
+(c) Operational risk assessment: evaluation of contractor capacity to perform and deliver.
+
+4.3 Risk Response.
+Agencies must develop and implement risk responses, including:
+(a) Risk acceptance: accepting residual risk when within risk tolerance;
+(b) Risk avoidance: discontinuing activities that pose unacceptable risk, including terminating contracts with high-risk vendors;
+(c) Risk mitigation: implementing controls to reduce risk likelihood or impact;
+(d) Risk sharing: transferring risk through insurance, contracts, or partnerships.
+
+4.4 Risk Monitoring.
+Agencies must monitor risk responses and the evolving risk environment, including:
+(a) Continuous monitoring of vendor financial stability through credit monitoring services;
+(b) Periodic reassessment of critical vendor risk profiles;
+(c) Tracking of vendor incidents, breaches, and performance issues.
+
+5. Supplier Risk Within ERM.
+Vendor and contractor risk must be managed within the ERM framework. Specific requirements:
+
+5.1 Vendor Financial Stability.
+(a) Agencies must assess the financial stability of critical vendors prior to contract award;
+(b) Financial distress indicators including negative credit ratings, litigation, and regulatory actions must trigger escalated review;
+(c) Vendor insolvency poses mission risk and requires contingency planning.
+
+5.2 Vendor Compliance.
+(a) Vendors must be screened for debarment, suspension, and sanctions status prior to award and periodically during performance;
+(b) Compliance with applicable regulatory requirements (e.g., labor laws, data protection) must be verified;
+(c) Diversity and small business subcontracting requirements must be tracked and reported.
+
+5.3 Subcontracting Requirements.
+(a) Agencies must ensure prime contractors meet diversity subcontracting goals;
+(b) Small business subcontracting plans must specify percentage targets for small, small disadvantaged, women-owned, HUBZone, service-disabled veteran-owned, and veteran-owned small businesses;
+(c) Failure to meet subcontracting targets may be considered in responsibility determinations and past performance evaluations.
+
+PART III — INTERNAL CONTROL
+
+6. Internal Control Framework.
+Agencies must maintain effective systems of internal control based on the standards established by the Government Accountability Office (GAO) in Standards for Internal Control in the Federal Government (Green Book).
+
+6.1 Control Environment.
+Leadership must demonstrate commitment to integrity and ethical values, and establish accountability for internal control responsibilities.
+
+6.2 Risk Assessment.
+Management must identify, analyze, and respond to risks to achieving defined objectives. Vendor and contractor risks are a significant component of operational risk assessment.
+
+6.3 Control Activities.
+Agencies must implement control activities to mitigate identified risks, including:
+(a) Segregation of duties in procurement and contract management;
+(b) Pre-award responsibility determinations;
+(c) Contract oversight and monitoring;
+(d) Invoice review and payment controls.
+
+6.4 Information and Communication.
+Agencies must ensure relevant information is communicated to those who need it. Vendor risk information must be shared across procurement, financial management, and program offices.
+
+6.5 Monitoring.
+Agencies must monitor the effectiveness of internal controls and take corrective actions as needed.
+
+PART IV — REPORTING
+
+7. Annual Assurance Statement.
+Agency heads must provide an annual assurance statement on the effectiveness of internal controls and ERM processes.
+
+8. Material Weaknesses.
+Material weaknesses in internal control or ERM must be reported and remediation plans developed and implemented.
+
+APPENDIX A — RISK APPETITE AND TOLERANCE
+
+A.1 Risk Appetite.
+Risk appetite is the amount of risk an organization is willing to accept in pursuit of its objectives. Agencies must define risk appetite statements for key risk categories including vendor and contractor risk.
+
+A.2 Risk Tolerance.
+Risk tolerance is the acceptable variation in outcomes related to specific risks. For vendor financial stability, risk tolerance should consider:
+(a) Criticality of the vendor to mission operations;
+(b) Availability of alternative vendors;
+(c) Contract value and duration;
+(d) Impact of vendor failure on program delivery.

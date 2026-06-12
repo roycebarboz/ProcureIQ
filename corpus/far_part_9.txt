@@ -1,0 +1,99 @@
+FAR PART 9 — CONTRACTOR QUALIFICATIONS
+
+9.1 Responsible Prospective Contractors
+
+9.100 Scope of subpart.
+This subpart prescribes policies and procedures for determining contractor responsibility.
+
+9.101 Definitions.
+Debarment means action taken by a debarring official under 9.406 to exclude a contractor from Government contracting and Government-approved subcontracting for a reasonable, specified period.
+
+Suspension means action taken by a suspending official under 9.407 to disqualify a contractor temporarily from Government contracting and Government-approved subcontracting.
+
+9.102 Policy.
+(a) Purchases shall be made from, and contracts shall be awarded to, responsible prospective contractors only.
+(b) No purchase or award shall be made unless the contracting officer makes an affirmative determination of responsibility.
+
+9.103 Procedures.
+(a) The contracting officer shall determine that the prospective contractor is responsible prior to awarding a contract.
+(b) The contracting officer shall consider information from various sources including the System for Award Management (SAM), past performance information, and financial capability assessments.
+
+9.104 Standards.
+9.104-1 General standards.
+To be determined responsible, a prospective contractor must —
+(a) Have adequate financial resources to perform the contract, or the ability to obtain them;
+(b) Be able to comply with the required or proposed delivery or performance schedule;
+(c) Have a satisfactory performance record;
+(d) Have a satisfactory record of integrity and business ethics;
+(e) Have the necessary organization, experience, accounting and operational controls, and technical skills;
+(f) Have the necessary production, construction, and technical equipment and facilities; and
+(g) Be otherwise qualified and eligible to receive an award under applicable laws and regulations.
+
+9.104-2 Special standards.
+When it is necessary for a particular acquisition, the contracting officer shall establish special standards of responsibility. Special standards may be particularly important for acquisitions of security systems, IT services, or critical infrastructure support.
+
+9.104-5 Subcontractor responsibility.
+(a) Generally, prospective prime contractors are responsible for determining the responsibility of their prospective subcontractors.
+
+9.105 Procedures.
+9.105-1 Obtaining information.
+The contracting officer shall obtain sufficient information to determine whether the prospective contractor is responsible, including:
+(a) Financial capability (credit reports, financial statements);
+(b) Performance history (past performance evaluations, references);
+(c) Technical capability and capacity;
+(d) Compliance with labor laws and equal opportunity requirements.
+
+9.2 Qualifications Requirements
+
+9.202 Policy.
+Agencies may establish qualification requirements applicable to both products and producers, testing requirements, or other measures to ensure contractor qualification.
+
+9.3 First Article Testing and Approval
+
+9.301 Definition.
+First article means a preproduction model, initial production sample, test sample, first lot, pilot lot, or pilot model.
+
+9.4 Debarment, Suspension, and Ineligibility
+
+9.400 Scope of subpart.
+This subpart prescribes policies and procedures governing the debarment and suspension of contractors.
+
+9.401 Applicability.
+The provisions of this subpart apply to all procurement activities.
+
+9.402 Policy.
+(a) The Government's policy is to conduct business only with responsible contractors.
+(b) A contractor that has been debarred or suspended shall not receive contract awards during the debarment or suspension period.
+(c) Contractors listed on the Excluded Parties List System (EPLS) or in SAM as debarred, suspended, or ineligible shall not receive contract awards.
+
+9.403 Definitions.
+Debarring official means an agency head or a designee authorized by the agency head to impose debarment.
+Suspending official means an agency head or a designee authorized to impose suspension.
+
+9.405 Effect of listing.
+(a) Contractors debarred, suspended, or proposed for debarment are excluded from receiving contracts.
+(b) Agencies shall not solicit offers from, award contracts to, or consent to subcontracts with these contractors unless a compelling reason exists.
+
+9.406 Debarment.
+9.406-1 General.
+The debarring official may debar a contractor for:
+(a) Conviction of or civil judgment for fraud, bribery, false statements;
+(b) Violation of Federal antitrust statutes;
+(c) Commission of embezzlement, theft, or other offense indicating a lack of business integrity;
+(d) Willful failure to perform in accordance with contract terms;
+(e) OFAC sanctions violations;
+(f) Export control violations.
+
+9.407 Suspension.
+9.407-1 General.
+The suspending official may suspend a contractor suspected of committing offenses described in 9.406.
+
+9.5 Organizational and Consultant Conflicts of Interest
+
+9.500 Scope of subpart.
+This subpart prescribes responsibilities, general rules, and procedures for identifying, evaluating, and resolving organizational conflicts of interest.
+
+9.6 Contractor Team Arrangements
+
+9.601 Definition.
+Contractor team arrangement means an arrangement in which two or more companies form a partnership or joint venture to act as a potential prime contractor.

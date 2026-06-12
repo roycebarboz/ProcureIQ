@@ -1,0 +1,109 @@
+NIST SP 800-161 REV. 1 — CYBERSECURITY SUPPLY CHAIN RISK MANAGEMENT PRACTICES FOR SYSTEMS AND ORGANIZATIONS
+
+CHAPTER 1 — INTRODUCTION
+
+1.1 Purpose and Applicability.
+This publication provides guidance to organizations on identifying, assessing, and mitigating cybersecurity risks throughout the supply chain at all levels of their organizations. The guidance integrates cybersecurity supply chain risk management (C-SCRM) into enterprise risk management (ERM) and systems engineering processes.
+
+1.2 Background.
+Supply chain risks include the insertion of counterfeits, unauthorized production, tampering, theft, insertion of malicious software and hardware, as well as poor manufacturing and development practices in the supply chain. These risks are realized when threats in the supply chain exploit existing vulnerabilities.
+
+1.3 Scope.
+This document applies to all federal agencies and their supply chains, including contractors, subcontractors, and vendors providing IT and OT products, services, and systems.
+
+CHAPTER 2 — THE FUNDAMENTALS OF C-SCRM
+
+2.1 Supply Chain Risk.
+Supply chain risk is the potential for harm or compromise to an organization through its supply chain. Cybersecurity supply chain risk is specific to the cybersecurity domain and includes risks to the confidentiality, integrity, and availability of data and systems.
+
+2.2 C-SCRM Activities.
+Core C-SCRM activities include:
+(a) Identifying supply chain risks through supplier assessments, audits, and continuous monitoring;
+(b) Assessing the criticality of suppliers and the products/services they provide;
+(c) Responding to identified risks through mitigation strategies, including diversification, contractual protections, and supplier qualification;
+(d) Monitoring the effectiveness of risk responses.
+
+2.3 Key C-SCRM Practices.
+(a) Supplier qualification and vetting: Organizations should establish processes for qualifying suppliers, including background checks, financial stability assessments, and security assessments.
+(b) Contractual protections: Contracts with suppliers should include data protection agreement (DPA) clauses, security requirements, audit rights, and incident notification obligations. Vendors must comply with all applicable DPA and data handling requirements.
+(c) Continuous monitoring: Organizations should continuously monitor suppliers for changes in financial stability, security posture, and compliance status.
+(d) Incident response: Organizations should include supply chain incidents in their incident response plans.
+
+CHAPTER 3 — C-SCRM ORGANIZATIONAL STRUCTURE
+
+3.1 C-SCRM Policy.
+Organizations should establish a C-SCRM policy that defines roles, responsibilities, and processes for managing supply chain risks.
+
+3.2 C-SCRM Roles and Responsibilities.
+(a) Executive leadership: Responsible for establishing C-SCRM strategy and ensuring adequate resources.
+(b) C-SCRM Program Manager: Responsible for day-to-day C-SCRM activities.
+(c) Contracting Officers: Responsible for incorporating C-SCRM requirements into contracts.
+(d) System Owners: Responsible for identifying supply chain dependencies for their systems.
+
+3.3 Supplier Tiers.
+Organizations should identify and document their supply chain tiers:
+(a) Tier 1: Direct suppliers (prime contractors);
+(b) Tier 2: Sub-tier suppliers (subcontractors);
+(c) Tier 3 and beyond: Component and material suppliers.
+
+CHAPTER 4 — C-SCRM CONTROLS AND PRACTICES
+
+4.1 Supplier Assessment Controls.
+Organizations should implement controls to:
+(a) Assess supplier financial stability to identify risks of supplier insolvency or acquisition by adversarial entities;
+(b) Evaluate supplier security practices through audits, questionnaires, and third-party assessments;
+(c) Review supplier background information including sanctions screening, debarment status, and beneficial ownership.
+
+4.2 Sanctions and Debarment Screening.
+(a) All suppliers must be screened against OFAC sanctions lists and the SAM Excluded Parties list prior to award and periodically during contract performance.
+(b) Contracts with entities on OFAC sanctions lists are prohibited. Discovering a supplier is sanctioned during performance constitutes grounds for immediate contract termination.
+
+4.3 Access Controls for Vendors.
+Vendor access to organizational systems and data must be controlled through:
+(a) Principle of least privilege: Vendors receive only the minimum access necessary;
+(b) Multi-factor authentication (MFA) for all remote vendor access;
+(c) Audit logging of all vendor access activities;
+(d) Time-limited access credentials that expire when no longer needed.
+
+4.4 Data Processing Controls.
+(a) Vendors processing personal data or sensitive government information must comply with applicable data protection requirements.
+(b) Data processing agreements (DPA) must specify: purpose limitation, data minimization, storage limitation, and security measures.
+(c) Vendors must notify the organization within 72 hours of discovering a data breach.
+
+4.5 Software and Hardware Integrity.
+(a) Organizations should verify the integrity of software and hardware obtained from suppliers.
+(b) Software bills of materials (SBOMs) should be required for critical software components.
+(c) Hardware should be procured through authorized channels to reduce counterfeit risk.
+
+CHAPTER 5 — C-SCRM ASSESSMENTS
+
+5.1 Supplier Risk Assessments.
+Organizations should conduct risk assessments of suppliers to identify and evaluate supply chain risks. Assessments should consider:
+(a) Supplier financial health and stability — evaluate through credit ratings, financial statements, and news monitoring;
+(b) Geographic concentration risk — suppliers in high-risk regions may present additional threats;
+(c) Technical security posture — assess through security questionnaires, certifications (ISO 27001, SOC 2), and penetration testing results;
+(d) Dependency risk — assess the criticality and replaceability of the supplier.
+
+5.2 Criticality Assessment.
+(a) Critical suppliers are those providing products or services essential to the organization's mission.
+(b) Critical suppliers warrant more frequent and rigorous assessments.
+
+CHAPTER 6 — C-SCRM IN ACQUISITION
+
+6.1 Acquisition Strategy.
+C-SCRM considerations should be incorporated into acquisition strategies from the earliest stages.
+
+6.2 Contract Requirements.
+Contracts with critical suppliers should include:
+(a) Security requirements and standards compliance;
+(b) DPA and data handling requirements;
+(c) Audit rights and right to assess;
+(d) Incident notification requirements;
+(e) Supply chain transparency requirements including sub-tier supplier disclosure.
+
+6.3 Supplier Selection.
+Supplier selection criteria should include C-SCRM factors such as:
+(a) Security certifications (ISO 27001, FedRAMP, SOC 2 Type II);
+(b) Financial stability and credit ratings;
+(c) Past performance in secure supply chain management;
+(d) Geographic and supplier diversity.
