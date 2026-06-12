@@ -1,0 +1,5 @@
+subscription_id           = "your-subscription-id-here"
+location                  = "eastus"
+environment               = "prod"
+openai_gpt4o_capacity     = 30
+openai_embedding_capacity = 120

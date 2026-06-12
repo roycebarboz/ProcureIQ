@@ -23,6 +23,8 @@ frontend/dist/
 *.tfstate
 *.tfstate.backup
 .terraform.lock.hcl
+infra/terraform.tfvars
+infra/tfplan.out
 
 # OS
 .DS_Store
