@@ -130,7 +130,7 @@ async def test_happy_path_full_pipeline_produces_valid_brief():
         ),
         patch(
             "agents.risk_synthesizer._call_llm",
-            new=AsyncMock(return_value=mock_llm_result),
+            new=AsyncMock(return_value=(mock_llm_result, 0, 0)),
         ),
     ):
         g = build_graph()
@@ -188,3 +188,82 @@ async def test_both_nodes_hard_fail_routes_to_human_review():
     assert result["recommendation"] == "Pending"
     assert result["risk_score"] == 0
     assert result["confidence"] == 0.0
+
+
+# ---------------------------------------------------------------------------
+# Slice 10 — /dashboard endpoint
+# ---------------------------------------------------------------------------
+
+
+async def test_dashboard_returns_200_with_correct_shape(client):
+    r = await client.get("/dashboard")
+    assert r.status_code == 200
+    data = r.json()
+    assert "node_latency" in data
+    assert "partial_rate" in data
+    assert "recommendation_dist" in data
+    assert "recent_assessments" in data
+
+
+async def test_dashboard_recommendation_dist_has_all_four_keys(client):
+    r = await client.get("/dashboard")
+    dist = r.json()["recommendation_dist"]
+    assert set(dist.keys()) == {"Approve", "Escalate", "Reject", "Pending"}
+
+
+async def test_dashboard_partial_rate_is_zero_when_no_assessments_run(client):
+    r = await client.get("/dashboard")
+    assert r.json()["partial_rate"] == 0.0
+
+
+def _mock_pipeline():
+    """Context manager that patches all three external calls for dashboard tests."""
+    from unittest.mock import AsyncMock, patch
+    from contextlib import AsyncExitStack
+
+    mock_llm = {"risk_score": 3, "recommendation": "Approve", "risk_brief": "Low risk."}
+    return (
+        patch("agents.market_scout.tavily_search",
+              new=AsyncMock(return_value=[{"content": "ok", "score": 0.9}])),
+        patch("agents.policy_librarian.search_policy_chunks",
+              new=AsyncMock(return_value=[{"chunk_text": "ok", "score": 0.8, "source_doc": "doc"}])),
+        patch("agents.risk_synthesizer._call_llm",
+              new=AsyncMock(return_value=(mock_llm, 0, 0))),
+    )
+
+
+async def test_dashboard_recent_assessments_populated_after_assessment(client):
+    patches = _mock_pipeline()
+    with patches[0], patches[1], patches[2]:
+        await _collect_events(client, {"vendor_name": "DashVendor", "category": "IT Services"})
+    r = await client.get("/dashboard")
+    recents = r.json()["recent_assessments"]
+    vendor_names = [a["vendor_name"] for a in recents]
+    assert "DashVendor" in vendor_names
+
+
+async def test_dashboard_recent_assessment_has_required_fields(client):
+    patches = _mock_pipeline()
+    with patches[0], patches[1], patches[2]:
+        await _collect_events(client, {"vendor_name": "FieldVendor", "category": "IT Services"})
+    r = await client.get("/dashboard")
+    recents = r.json()["recent_assessments"]
+    match = next((a for a in recents if a["vendor_name"] == "FieldVendor"), None)
+    assert match is not None
+    assert "request_id" in match
+    assert "recommendation" in match
+    assert "confidence" in match
+    assert "timestamp" in match
+    assert match["recommendation"] in ("Approve", "Escalate", "Reject", "Pending")
+
+
+async def test_dashboard_node_latency_populated_after_assessment(client):
+    patches = _mock_pipeline()
+    with patches[0], patches[1], patches[2]:
+        await _collect_events(client, {"vendor_name": "LatencyVendor", "category": "IT Services"})
+    r = await client.get("/dashboard")
+    latency = r.json()["node_latency"]
+    assert isinstance(latency, dict)
+    assert len(latency) > 0
+    for duration in latency.values():
+        assert duration >= 0

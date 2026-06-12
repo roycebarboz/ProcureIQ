@@ -3,6 +3,7 @@ import os
 
 from openai import AsyncAzureOpenAI
 
+from observability import get_tracker, node_span
 from state import State, compute_confidence
 
 _ENDPOINT = os.environ.get("AZURE_OPENAI_ENDPOINT", "")
@@ -85,7 +86,8 @@ Rules:
 - Degraded assessment → risk_score ≤ 6, risk_brief must acknowledge missing data"""
 
 
-async def _call_llm(prompt: str) -> dict:
+async def _call_llm(prompt: str) -> tuple[dict, int, int]:
+    """Returns (parsed_output, prompt_tokens, completion_tokens)."""
     client = AsyncAzureOpenAI(
         azure_endpoint=_ENDPOINT,
         api_key=_KEY,
@@ -97,26 +99,37 @@ async def _call_llm(prompt: str) -> dict:
         messages=[{"role": "user", "content": prompt}],
         response_format={"type": "json_object"},
     )
-    return json.loads(response.choices[0].message.content)
+    usage = response.usage
+    prompt_tokens = usage.prompt_tokens if usage else 0
+    completion_tokens = usage.completion_tokens if usage else 0
+    return json.loads(response.choices[0].message.content), prompt_tokens, completion_tokens
 
 
 async def risk_synthesizer_node(state: State) -> dict:
-    prompt = _build_prompt(state)
-    llm_output = await _call_llm(prompt)
+    tracker = get_tracker()
+    request_id = state["request_id"]
 
-    risk_score = int(llm_output.get("risk_score", 5))
-    recommendation = llm_output.get("recommendation", "Escalate")
-    risk_brief = llm_output.get("risk_brief", "")
+    async with node_span(tracker, request_id, "risk_synthesizer", state["partial_output"]):
+        prompt = _build_prompt(state)
+        llm_output, prompt_tokens, completion_tokens = await _call_llm(prompt)
 
-    if state["partial_output"] and risk_score > 6:
-        risk_score = 6
+        tracker.track_llm_tokens(request_id, "risk_synthesizer", prompt_tokens, completion_tokens)
+        tracker.track_cost_per_assessment(request_id, prompt_tokens, completion_tokens)
 
-    confidence = compute_confidence(state)
+        risk_score = int(llm_output.get("risk_score", 5))
+        recommendation = llm_output.get("recommendation", "Escalate")
+        risk_brief = llm_output.get("risk_brief", "")
 
-    return {
-        "risk_score": risk_score,
-        "recommendation": recommendation,
-        "risk_brief": risk_brief,
-        "confidence": confidence,
-        "partial_output": state["partial_output"],
-    }
+        if state["partial_output"] and risk_score > 6:
+            risk_score = 6
+
+        confidence = compute_confidence(state)
+        tracker.track_recommendation(request_id, recommendation, state["partial_output"])
+
+        return {
+            "risk_score": risk_score,
+            "recommendation": recommendation,
+            "risk_brief": risk_brief,
+            "confidence": confidence,
+            "partial_output": state["partial_output"],
+        }

@@ -1,17 +1,17 @@
 import { useState } from 'react'
 
-interface PolicyHit {
-  chunk_text: string
-  score: number
-  source_doc: string
-  risk_category: string
+interface MarketSignal {
+  source: string
+  content: string
+  retrieved_at: string
+  confidence: number
 }
 
-interface PolicyHitListProps {
-  hits: PolicyHit[]
+interface MarketSignalListProps {
+  signals: MarketSignal[]
 }
 
-export default function PolicyHitList({ hits }: PolicyHitListProps) {
+export default function MarketSignalList({ signals }: MarketSignalListProps) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -22,18 +22,17 @@ export default function PolicyHitList({ hits }: PolicyHitListProps) {
         className="flex items-center gap-2 text-sm font-semibold text-gray-700 hover:text-gray-900"
       >
         <span>{open ? '▾' : '▸'}</span>
-        Policy hits ({hits.length})
+        Market signals ({signals.length})
       </button>
 
       {open && (
         <ul className="mt-2 space-y-3">
-          {hits.map((h, i) => (
+          {signals.map((s, i) => (
             <li key={i} className="border border-gray-100 rounded-md p-3 text-sm bg-white">
-              <p className="text-gray-800">{h.chunk_text}</p>
+              <p className="text-gray-800">{s.content}</p>
               <div className="flex gap-3 mt-1 text-xs text-gray-500">
-                <span>{h.source_doc}</span>
-                <span>{h.risk_category}</span>
-                <span>score {h.score.toFixed(2)}</span>
+                <span>{s.source}</span>
+                <span>confidence {(s.confidence * 100).toFixed(0)}%</span>
               </div>
             </li>
           ))}

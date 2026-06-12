@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "ProcureIQ vendor risk assessment backend"
 requires-python = ">=3.13"
 dependencies = [
+    "applicationinsights>=0.11.10",
     "azure-search-documents>=12.0.0",
     "fastapi>=0.136.3",
     "langchain-openai>=1.2.2",
