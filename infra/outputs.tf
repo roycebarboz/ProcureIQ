@@ -13,12 +13,6 @@ output "key_vault_uri" {
   value       = azurerm_key_vault.main.vault_uri
 }
 
-output "application_insights_connection_string" {
-  description = "Application Insights connection string"
-  value       = azurerm_application_insights.main.connection_string
-  sensitive   = true
-}
-
 output "openai_endpoint" {
   description = "Azure OpenAI endpoint"
   value       = azurerm_cognitive_account.openai.endpoint

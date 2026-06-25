@@ -28,7 +28,9 @@ def _build_prompt(state: State) -> str:
             for s in state["market_data"]
         )
     else:
-        market_section = "[MARKET DATA UNAVAILABLE — do not infer spend patterns or financial stability]"
+        market_section = (
+            "[MARKET DATA UNAVAILABLE — do not infer spend patterns or financial stability]"  # noqa: E501
+        )
 
     if state["policy_hits"]:
         policy_section = "\n".join(
@@ -58,7 +60,8 @@ def _build_prompt(state: State) -> str:
             "risk_score MUST be ≤ 6."
         )
 
-    return f"""You are a procurement risk analyst. Assess the following vendor and produce a structured JSON risk brief.
+    return f"""You are a procurement risk analyst. Assess the following vendor \
+and produce a structured JSON risk brief.
 
 Vendor: {vendor}
 Category: {category}

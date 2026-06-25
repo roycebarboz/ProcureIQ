@@ -120,15 +120,24 @@ SSE events emitted per agent: `scout_complete`, `librarian_complete`, `assessmen
 Vite + React + TailwindCSS. Three screens:
 - **Assess**: input form + live agent progress cards populated via SSE
 - **Risk Brief**: risk score, confidence, recommendation badge, narrative, expandable policy hits and market signals
-- **Dashboard**: App Insights charts — node latency, partial_output rate, recommendation distribution, recent assessments table
+- **Dashboard**: backend-fed charts (from `GET /dashboard`) — node latency, partial_output rate, recommendation distribution, recent assessments table. This is the embedded analyst/demo view; deep infra + AI telemetry and alerting live in Dynatrace, not here.
 
 No downloadable PDF. No authentication.
 
 ### Observability
-Azure Application Insights. Full instrumentation: per-node duration, confidence score distribution, partial_output rate, recommendation breakdown, LLM token usage per node, Tavily latency, Azure AI Search latency, cost-per-assessment.
+Dynatrace — single observability plane for both infrastructure and AI. Two ingest paths run together:
+
+- **Infrastructure telemetry** — via the **Dynatrace Azure-native integration** (Azure Monitor → Dynatrace), configured at the subscription/Dynatrace-tenant level. This is the supported path for Azure Container Apps, which does not allow full-stack OneAgent sidecar injection (no privileged init / host access, unlike AKS or VMs). Delivers container CPU/memory, request/replica metrics, and platform topology; Davis AI provides anomaly detection and root-cause analysis on the infra layer.
+- **OpenTelemetry (OTLP)** — the FastAPI backend exports traces and metrics to Dynatrace over OTLP. Application spans carry `request_id` for end-to-end correlation. **AI observability** uses the OpenTelemetry GenAI semantic conventions: each LLM call is a span with `gen_ai.system`, `gen_ai.request.model`, prompt/completion token counts (`gen_ai.usage.input_tokens` / `output_tokens`), and derived cost as span attributes. This makes per-node LLM token usage and cost-per-assessment first-class, queryable telemetry rather than hardcoded UI values.
+
+Full instrumentation coverage (unchanged from prior plan, now Dynatrace-backed): per-node duration, confidence score distribution, partial_output rate, recommendation breakdown, LLM token usage per node, Tavily latency, Azure AI Search latency, cost-per-assessment. Deep dashboards, alerting, and AI/infra anomaly detection live in Dynatrace; the in-app Dashboard screen remains for the analyst-facing demo view (see Frontend).
+
+Dynatrace is an external SaaS tenant — its environment URL and ingest API token are stored in Key Vault and surfaced to the Container App via managed identity.
 
 ### Infrastructure
-Terraform. Azure resources: Container Apps (backend), Static Web Apps (frontend), Azure OpenAI, Azure AI Search, Application Insights + Log Analytics, Key Vault, Container Registry, Storage Account (Terraform remote state).
+Terraform. Azure resources: Container Apps (backend), Static Web Apps (frontend), Azure OpenAI, Azure AI Search, Log Analytics (Azure platform / Container Apps system logs), Key Vault, Container Registry, Storage Account (Terraform remote state).
+
+Observability is **Dynatrace** (external SaaS): Application Insights is removed. Infrastructure telemetry comes from the **Dynatrace Azure-native integration** (Azure Monitor → Dynatrace, configured at tenant/subscription level — Container Apps does not support OneAgent sidecar injection), and the backend exports app + AI spans to Dynatrace via **OTLP**. Log Analytics is retained only for Azure platform/system logs. The Dynatrace environment URL and ingest API token are provisioned into Key Vault (Terraform manages the secret references, not the token value).
 
 Secrets: `.env` + python-dotenv locally. Key Vault + managed identity in production.
 
@@ -180,7 +189,7 @@ Integration test with mocked graph. Assert event sequence: `scout_complete` fire
 ## Further Notes
 
 - The system's key differentiator is visible, honest degradation. When data is missing, the UI must show what is missing — not hide it behind a spinner or suppress the score. This should be reinforced at every frontend PR review.
-- `request_id` must be generated at the API boundary (FastAPI), not inside the graph. It must be present in every SSE event and every App Insights trace to enable end-to-end correlation.
+- `request_id` must be generated at the API boundary (FastAPI), not inside the graph. It must be present in every SSE event and on every Dynatrace/OTel span (as a span attribute) to enable end-to-end correlation across the trace.
 - The fabricated policy document ("ProcureIQ Supplier Risk Policy v2.pdf") should be written before the ingest script is run. Its content determines the density of policy hits in demos — it should include spend thresholds, DPA/data handling requirements, diversity targets, and SLA minimums to ensure Librarian returns non-trivial results across vendor categories.
 - Terraform remote state requires the Azure Storage Account to be provisioned manually before `terraform init`. Document this as a one-time bootstrap step in the repo README.
-- For the Deloitte FDE showcase context: the Dashboard screen and observability instrumentation are what differentiate this from a standard RAG demo. Prioritize getting App Insights wired up early so the dashboard has real data by demo time.
+- For the Deloitte FDE showcase context: the Dashboard screen and observability instrumentation are what differentiate this from a standard RAG demo. Prioritize getting Dynatrace wired up early — both the OTel/AI span export and a usable Dynatrace dashboard — so there is real infra + AI telemetry (token usage, cost-per-assessment, anomaly detection) by demo time.

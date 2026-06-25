@@ -3,3 +3,7 @@ location                  = "eastus"
 environment               = "prod"
 openai_gpt4o_capacity     = 30
 openai_embedding_capacity = 120
+
+# Dynatrace observability — env URL only (no trailing slash).
+# The ingest token (dynatrace-api-token) is set in Key Vault, not here.
+dynatrace_env_url = "https://abc12345.live.dynatrace.com"

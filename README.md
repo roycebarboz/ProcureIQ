@@ -57,12 +57,13 @@ terraform apply
 | Resource Group | `rg-procureiq-prod` |
 | Container Registry | `crprocureiqprod` |
 | Key Vault | `kv-procureiq-prod` |
-| Log Analytics Workspace | `law-procureiq-prod` |
-| Application Insights | `ai-procureiq-prod` |
+| Log Analytics Workspace | `law-procureiq-prod` (Azure platform/system logs only) |
 | Azure OpenAI (`gpt-4o` + `text-embedding-3-small`) | `oai-procureiq-prod` |
 | Azure AI Search | `srch-procureiq-prod` |
 | Container Apps Environment + App | `cae-procureiq-prod` / `ca-procureiq-backend-prod` |
 | Static Web App | `stapp-procureiq-frontend-prod` |
+
+> **Observability** is **Dynatrace** (external SaaS), not an Azure resource. The backend exports app + AI spans via OTLP (`DT_ENV_URL` + `DT_API_TOKEN`); infra telemetry comes from the Dynatrace Azure-native integration (Container Apps has no OneAgent sidecar path). The Dynatrace environment URL and ingest token are stored in Key Vault. Log Analytics is retained only for Azure platform/system logs.
 
 ### Variables
 

@@ -1,18 +1,39 @@
 import json
+import os
 import time
 from datetime import datetime, timezone
 from typing import Optional
 from uuid import uuid4
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sse_starlette.sse import EventSourceResponse
 
 from graph import graph
-from observability import RequestLatencyMiddleware, get_tracker
+from observability import RequestLatencyMiddleware, get_tracker, init_telemetry
 from state import State, compute_confidence
 
+# Configure OTel → Dynatrace export (no-op locally / in CI when DT_* unset).
+init_telemetry()
+
 app = FastAPI(title="ProcureIQ")
+
+# Frontend (Static Web Apps) is a separate origin from the backend (Container
+# Apps), so browser calls are cross-origin. No auth/cookies (PRD), so a simple
+# origin allowlist is sufficient. Comma-separated origins via CORS_ALLOW_ORIGINS;
+# "*" by default for local/dev.
+_cors_origins = [o.strip() for o in os.getenv("CORS_ALLOW_ORIGINS", "*").split(",") if o.strip()]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_cors_origins,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app.add_middleware(RequestLatencyMiddleware, tracker=get_tracker())
 
 _results: dict[str, State] = {}

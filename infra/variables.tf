@@ -32,3 +32,9 @@ variable "openai_embedding_capacity" {
   type        = number
   default     = 120
 }
+
+variable "dynatrace_env_url" {
+  description = "Dynatrace environment URL, e.g. https://abc12345.live.dynatrace.com (no trailing slash). Tokens are stored in Key Vault, not here."
+  type        = string
+  default     = ""
+}

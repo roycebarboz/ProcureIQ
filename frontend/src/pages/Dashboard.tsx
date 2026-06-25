@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { apiUrl } from '../lib/api'
 
 interface RecentAssessment {
   request_id: string
@@ -47,7 +48,7 @@ export default function Dashboard() {
   const [data, setData] = useState<DashboardData | null>(null)
 
   useEffect(() => {
-    fetch('/dashboard').then(r => r.json()).then(setData)
+    fetch(apiUrl('/dashboard')).then(r => r.json()).then(setData)
   }, [])
 
   if (!data) {

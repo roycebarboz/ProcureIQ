@@ -2,6 +2,8 @@ import asyncio
 import time
 from datetime import datetime, timezone
 
+import httpx
+
 from observability import get_tracker, node_span
 from state import MarketSignal, NodeError, State
 from tools.erp_mock import get_erp_spend
@@ -41,6 +43,17 @@ async def market_scout_node(state: State) -> dict:
                 }
                 return {
                     "market_data": [],
+                    "errors": list(state["errors"]) + [error],
+                    "partial_output": True,
+                }
+            except httpx.HTTPStatusError as exc:
+                error = {
+                    "node": "market_scout",
+                    "reason": f"tavily_http_{exc.response.status_code}",
+                    "fallback_used": True,
+                }
+                return {
+                    "market_data": [get_erp_spend(vendor)],
                     "errors": list(state["errors"]) + [error],
                     "partial_output": True,
                 }

@@ -29,7 +29,7 @@ async function submitForm(user: ReturnType<typeof userEvent.setup>, fetchBody: R
   renderAssess()
   await user.type(screen.getByRole('textbox', { name: /vendor name/i }), 'Acme')
   await user.selectOptions(screen.getByRole('combobox', { name: /category/i }), 'IT Services')
-  await user.click(screen.getByRole('button', { name: /run assessment/i }))
+  await user.click(screen.getByRole('button', { name: /assess vendor/i }))
 }
 
 // ── Cycle 2: category dropdown ────────────────────────────────────────────────
@@ -59,13 +59,14 @@ describe('Assess form', () => {
     renderAssess()
     await user.type(screen.getByRole('textbox', { name: /vendor name/i }), 'Acme')
     await user.selectOptions(screen.getByRole('combobox', { name: /category/i }), 'IT Services')
-    await user.click(screen.getByRole('button', { name: /run assessment/i }))
+    await user.click(screen.getByRole('button', { name: /assess vendor/i }))
 
     expect(fetchSpy).toHaveBeenCalledWith(
       '/assess',
       expect.objectContaining({ method: 'POST' }),
     )
-    const body = JSON.parse(fetchSpy.mock.calls[0][1].body)
+    const postCall = fetchSpy.mock.calls.find(c => c[0] === '/assess')!
+    const body = JSON.parse(postCall[1].body)
     expect(body.spend_amount).toBeNull()
 
     vi.unstubAllGlobals()
@@ -91,9 +92,11 @@ describe('Assess SSE retry', () => {
       }),
     })
 
-    // First call = POST /assess (SSE stream, closes without assessment_complete)
-    // Second call = GET /assess/{id}/result
+    // First call = GET /dashboard (recent vendors, on mount)
+    // Second call = POST /assess (SSE stream, closes without assessment_complete)
+    // Third call = GET /assess/{id}/result
     vi.stubGlobal('fetch', vi.fn()
+      .mockResolvedValueOnce({ json: () => Promise.resolve({ recent_assessments: [] }) })
       .mockResolvedValueOnce({
         body: sseStream({
           event: 'scout_complete',
@@ -106,7 +109,7 @@ describe('Assess SSE retry', () => {
     renderAssess()
     await user.type(screen.getByRole('textbox', { name: /vendor name/i }), 'Acme')
     await user.selectOptions(screen.getByRole('combobox', { name: /category/i }), 'IT Services')
-    await user.click(screen.getByRole('button', { name: /run assessment/i }))
+    await user.click(screen.getByRole('button', { name: /assess vendor/i }))
 
     await waitFor(() =>
       expect(getFetch).toHaveBeenCalledWith('/assess/r-retry/result'),

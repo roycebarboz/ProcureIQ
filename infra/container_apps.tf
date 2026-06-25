@@ -39,13 +39,19 @@ resource "azurerm_container_app" "backend" {
     identity            = azurerm_user_assigned_identity.backend.id
   }
 
+  secret {
+    name                = "dynatrace-api-token"
+    key_vault_secret_id = azurerm_key_vault_secret.dynatrace_api_token.versionless_id
+    identity            = azurerm_user_assigned_identity.backend.id
+  }
+
   template {
     min_replicas = 1
     max_replicas = 5
 
     container {
       name   = "procureiq-backend"
-      image  = "${azurerm_container_registry.main.login_server}/procureiq-backend:latest"
+      image  = "mcr.microsoft.com/azuredocs/containerapps-helloworld:latest"
       cpu    = 0.5
       memory = "1Gi"
 
@@ -69,9 +75,25 @@ resource "azurerm_container_app" "backend" {
         value = "https://${azurerm_search_service.main.name}.search.windows.net"
       }
 
+      # Dynatrace OTLP — app traces + AI/LLM spans + metrics (observability.py).
       env {
-        name  = "APPINSIGHTS_CONNECTION_STRING"
-        value = azurerm_application_insights.main.connection_string
+        name  = "DT_ENV_URL"
+        value = var.dynatrace_env_url
+      }
+
+      env {
+        name        = "DT_API_TOKEN"
+        secret_name = "dynatrace-api-token"
+      }
+
+      env {
+        name  = "OTEL_SERVICE_NAME"
+        value = "procureiq-backend"
+      }
+
+      env {
+        name  = "ENVIRONMENT"
+        value = var.environment
       }
 
       env {
@@ -90,10 +112,25 @@ resource "azurerm_container_app" "backend" {
       }
 
       env {
+        name  = "CORS_ALLOW_ORIGINS"
+        value = "https://${azurerm_static_web_app.frontend.default_host_name}"
+      }
+
+      env {
         name        = "TAVILY_API_KEY"
         secret_name = "tavily-api-key"
       }
     }
+
+    # ── Dynatrace OneAgent (infra telemetry) ────────────────────────────────
+    # NOTE: full-stack OneAgent injection is an AKS/VM pattern and is NOT
+    # cleanly supported as an Azure Container Apps sidecar (no privileged
+    # init, no host access). The supported path for Container Apps infra
+    # telemetry is Dynatrace's Azure-native integration (Azure Monitor →
+    # Dynatrace), configured at the subscription/Dynatrace tenant level —
+    # outside this module. OTLP above already delivers app + AI telemetry.
+    #
+    # Infra metrics come from the Dynatrace Azure-native integration instead.
   }
 
   ingress {
@@ -104,6 +141,11 @@ resource "azurerm_container_app" "backend" {
       percentage      = 100
       latest_revision = true
     }
+  }
+
+  # CI/CD owns the image after first deploy — prevent terraform apply from reverting it
+  lifecycle {
+    ignore_changes = [template[0].container[0].image]
   }
 
   tags = local.common_tags

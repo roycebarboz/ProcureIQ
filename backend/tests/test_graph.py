@@ -112,7 +112,10 @@ async def test_happy_path_full_pipeline_produces_valid_brief():
     mock_llm_result = {
         "risk_score": 3,
         "recommendation": "Approve",
-        "risk_brief": "Acme Corp demonstrates strong financial performance and compliance posture with no blocking flags.",
+        "risk_brief": (
+            "Acme Corp demonstrates strong financial performance and "
+            "compliance posture with no blocking flags."
+        ),
     }
 
     with (
@@ -219,14 +222,15 @@ async def test_dashboard_partial_rate_is_zero_when_no_assessments_run(client):
 def _mock_pipeline():
     """Context manager that patches all three external calls for dashboard tests."""
     from unittest.mock import AsyncMock, patch
-    from contextlib import AsyncExitStack
 
     mock_llm = {"risk_score": 3, "recommendation": "Approve", "risk_brief": "Low risk."}
     return (
         patch("agents.market_scout.tavily_search",
               new=AsyncMock(return_value=[{"content": "ok", "score": 0.9}])),
         patch("agents.policy_librarian.search_policy_chunks",
-              new=AsyncMock(return_value=[{"chunk_text": "ok", "score": 0.8, "source_doc": "doc"}])),
+              new=AsyncMock(
+                  return_value=[{"chunk_text": "ok", "score": 0.8, "source_doc": "doc"}]
+              )),
         patch("agents.risk_synthesizer._call_llm",
               new=AsyncMock(return_value=(mock_llm, 0, 0))),
     )

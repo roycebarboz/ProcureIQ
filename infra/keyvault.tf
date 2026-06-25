@@ -49,3 +49,18 @@ resource "azurerm_key_vault_secret" "tavily" {
 
   depends_on = [azurerm_key_vault_access_policy.deployer]
 }
+
+# Dynatrace OTLP ingest token (scopes: openTelemetryTrace.ingest, metrics.ingest, logs.ingest).
+# Placeholder — set the real token after first apply:
+#   az keyvault secret set --vault-name kv-procureiq-prod --name dynatrace-api-token --value "dt0c01..."
+resource "azurerm_key_vault_secret" "dynatrace_api_token" {
+  name         = "dynatrace-api-token"
+  value        = "PLACEHOLDER-set-real-token-via-az-keyvault-secret-set"
+  key_vault_id = azurerm_key_vault.main.id
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+
+  depends_on = [azurerm_key_vault_access_policy.deployer]
+}

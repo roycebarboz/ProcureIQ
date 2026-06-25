@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import RiskGauge from '../components/RiskGauge'
 import PolicyHitList from '../components/PolicyHitList'
 import MarketSignalList from '../components/MarketSignalList'
+import { apiUrl } from '../lib/api'
 
 interface PolicyHit {
   chunk_text: string
@@ -45,7 +46,7 @@ export default function RiskBrief() {
 
   useEffect(() => {
     if (!requestId) return
-    fetch(`/assess/${requestId}/result`)
+    fetch(apiUrl(`/assess/${requestId}/result`))
       .then(r => r.json())
       .then(setResult)
   }, [requestId])

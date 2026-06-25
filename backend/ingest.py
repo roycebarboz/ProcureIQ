@@ -8,7 +8,6 @@ Reads .txt files from ../corpus/, splits on numbered section headers,
 embeds via Azure OpenAI text-embedding-3-small, upserts to Azure AI Search.
 """
 
-import asyncio
 import hashlib
 import os
 import re
@@ -40,7 +39,9 @@ _SEARCH_KEY = os.environ["AZURE_SEARCH_API_KEY"]
 _INDEX_NAME = os.environ.get("AZURE_SEARCH_INDEX_NAME", "procureiq-policy")
 _OPENAI_ENDPOINT = os.environ["AZURE_OPENAI_ENDPOINT"]
 _OPENAI_KEY = os.environ["AZURE_OPENAI_API_KEY"]
-_EMBEDDING_DEPLOYMENT = os.environ.get("AZURE_OPENAI_DEPLOYMENT_EMBEDDING", "text-embedding-3-small")
+_EMBEDDING_DEPLOYMENT = os.environ.get(
+    "AZURE_OPENAI_DEPLOYMENT_EMBEDDING", "text-embedding-3-small"
+)
 _OPENAI_API_VERSION = os.environ.get("AZURE_OPENAI_API_VERSION", "2024-02-01")
 
 _CORPUS_DIR = Path(__file__).parent.parent / "corpus"

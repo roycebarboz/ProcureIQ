@@ -1,11 +1,9 @@
 import asyncio
-from unittest.mock import AsyncMock, patch
-
-import pytest
+from unittest.mock import AsyncMock, MagicMock, patch
 
 from agents.market_scout import market_scout_node
-from agents.policy_librarian import policy_librarian_node
-from state import MarketSignal, NodeError, PolicyHit, State, should_synthesize
+from agents.policy_librarian import policy_librarian_node, search_policy_chunks
+from state import NodeError, PolicyHit, State, should_synthesize
 from tools.erp_mock import get_erp_spend
 
 
@@ -163,3 +161,49 @@ def test_librarian_zero_chunk_fallback_routes_to_risk_synthesizer():
     }
     state = _base_state(errors=[error], policy_hits=[])
     assert should_synthesize(state) == "risk_synthesizer"
+
+
+class _AsyncRows:
+    """Minimal async-iterable standing in for Azure Search's async results."""
+
+    def __init__(self, items):
+        self._items = items
+
+    def __aiter__(self):
+        self._it = iter(self._items)
+        return self
+
+    async def __anext__(self):
+        try:
+            return next(self._it)
+        except StopIteration:
+            raise StopAsyncIteration
+
+
+async def test_search_policy_chunks_uses_vector_query_not_lexical():
+    # Regression guard for PRD Story 16: retrieval must embed the query and run
+    # vector search. The original stub passed bare query text (lexical BM25) and
+    # this is exactly what no boundary-mocked node test could catch. Assert the
+    # SearchClient call carries vector_queries and no lexical search_text.
+    captured: dict = {}
+    fake_rows = [{"chunk_text": "x", "@search.score": 0.83, "source_doc": "policy.pdf"}]
+
+    async def _fake_search(*_args, **kwargs):
+        captured.update(kwargs)
+        return _AsyncRows(fake_rows)
+
+    mock_client = MagicMock()
+    mock_client.search = _fake_search
+    mock_client.__aenter__ = AsyncMock(return_value=mock_client)
+    mock_client.__aexit__ = AsyncMock(return_value=False)
+
+    with patch("agents.policy_librarian.SearchClient", return_value=mock_client), patch(
+        "agents.policy_librarian._embed_query", AsyncMock(return_value=[0.1] * 1536)
+    ) as mock_embed:
+        hits = await search_policy_chunks("IT Services", "data processing access controls")
+
+    mock_embed.assert_awaited_once()  # query was embedded → semantic, not keyword
+    assert captured.get("search_text") is None  # no lexical query text
+    assert captured.get("vector_queries"), "must pass vector_queries (vector search)"
+    assert captured["vector_queries"][0].fields == "embedding"
+    assert hits[0]["score"] == 0.83
