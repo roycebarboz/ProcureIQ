@@ -26,11 +26,23 @@ resource "azurerm_key_vault_access_policy" "backend" {
   secret_permissions = ["Get", "List"]
 }
 
-# Deployer — full secret lifecycle for seeding keys
-resource "azurerm_key_vault_access_policy" "deployer" {
+# Secret admins — full secret lifecycle. Fixed object IDs (NOT current-client)
+# so the policy is stable whether Terraform runs locally (operator) or in CI
+# (service principal). A dynamic current-client object_id caused the two to
+# fight over the same policy on every apply.
+resource "azurerm_key_vault_access_policy" "operator" {
   key_vault_id = azurerm_key_vault.main.id
   tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = data.azurerm_client_config.current.object_id
+  object_id    = var.operator_object_id
+
+  secret_permissions = ["Get", "List", "Set", "Delete", "Purge", "Recover"]
+}
+
+resource "azurerm_key_vault_access_policy" "ci" {
+  count        = var.ci_sp_object_id != "" ? 1 : 0
+  key_vault_id = azurerm_key_vault.main.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = var.ci_sp_object_id
 
   secret_permissions = ["Get", "List", "Set", "Delete", "Purge", "Recover"]
 }
@@ -47,7 +59,7 @@ resource "azurerm_key_vault_secret" "tavily" {
     ignore_changes = [value]
   }
 
-  depends_on = [azurerm_key_vault_access_policy.deployer]
+  depends_on = [azurerm_key_vault_access_policy.operator, azurerm_key_vault_access_policy.ci]
 }
 
 # Dynatrace OTLP ingest token (scopes: openTelemetryTrace.ingest, metrics.ingest, logs.ingest).
@@ -62,5 +74,5 @@ resource "azurerm_key_vault_secret" "dynatrace_api_token" {
     ignore_changes = [value]
   }
 
-  depends_on = [azurerm_key_vault_access_policy.deployer]
+  depends_on = [azurerm_key_vault_access_policy.operator, azurerm_key_vault_access_policy.ci]
 }
