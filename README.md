@@ -1,6 +1,100 @@
-# ProcureIQ
+# ProcureIQ — Vendor Risk & Procurement Intelligence Copilot
 
-AI-powered vendor risk copilot. LangGraph multi-agent backend, React frontend, deployed on Azure.
+> A multi-agent AI system that turns a vendor name into an auditable risk brief in seconds — and **degrades honestly** when data is missing instead of faking confidence.
+
+Enterprise procurement teams vet vendors by hand: cross-referencing market signals, internal policy, and spend history. ProcureIQ automates that with three coordinated LLM agents, streams their progress live, and produces a scored, sourced recommendation a human can defend in an audit.
+
+Built as a full-stack, production-shaped showcase: **LangGraph** agent orchestration, **FastAPI + SSE** streaming, a **React/TypeScript** UI, **Azure** infrastructure as code, a **CI/CD** pipeline, and **AI observability** via Dynatrace/OpenTelemetry.
+
+---
+
+## Screenshots
+
+
+### 1. Assessment workspace
+![ProcureIQ dashboard](docs/screenshots/01-dashboard.png)
+*Single-screen workspace: vendor intake → live intelligence pipeline → risk brief.*
+
+### 2. Live pipeline with graceful degradation
+![Streaming pipeline](docs/screenshots/02-pipeline-degraded.png)
+*The three agents streaming via SSE, with a ⚠ "Partial Data" warning on a degraded source. 
+
+### 3. Risk brief
+![Risk brief](docs/screenshots/03-risk-brief.png)
+*Score gauge, confidence, decision badge, narrative, and expandable market signals / policy hits.*
+
+### 4. AI observability in Dynatrace
+![Dynatrace GenAI trace](docs/screenshots/04-dynatrace-genai.png)
+*Distributed trace of one assessment with per-call GenAI spans (model, input/output tokens, cost).*
+
+### 5. CI/CD pipeline
+![GitHub Actions](docs/screenshots/05-ci-green.png)
+*Green `lint-test → build → deploy` run.*
+
+---
+
+## What it does
+
+- **Three-agent pipeline** (LangGraph): **Market Scout** (web + ERP signals) → **Policy Librarian** (semantic policy retrieval) → **Risk Synthesizer** (scored brief).
+- **Live streaming** — each agent's result streams to the UI over Server-Sent Events as it completes.
+- **Honest degradation** — when a source times out, the UI shows exactly what's missing, the risk score is capped, and confidence drops. Dual failure routes to human review instead of inventing a score.
+- **Auditable** — every assessment carries a `request_id` traceable from UI → API → agent spans in Dynatrace.
+- **Scored output** — 1–10 risk score, confidence, and an Approve / Escalate / Reject / Pending recommendation with a cited narrative.
+
+## Architecture
+
+```
+React + Vite (Static Web App)
+        │  SSE  ▲
+        ▼       │
+FastAPI  ──►  LangGraph
+        market_scout → policy_librarian →(conditional)→ risk_synthesizer
+                                          └─ dual failure → human_review
+        │            │                │
+   Tavily/ERP   Azure AI Search   Azure OpenAI (gpt-4o)
+        │
+   OpenTelemetry (OTLP) ──► Dynatrace  (traces, metrics, GenAI/AI spans)
+```
+
+Deployed on Azure Container Apps (backend) + Static Web Apps (frontend), provisioned with Terraform, shipped by GitHub Actions.
+
+## Tech stack
+
+| Layer | Tech |
+|---|---|
+| Agents | LangGraph (single flat graph, conditional routing) |
+| LLM | Azure OpenAI `gpt-4o`; `text-embedding-3-small` |
+| Retrieval | Azure AI Search (semantic policy corpus) |
+| API | FastAPI + SSE (`sse-starlette`) |
+| Frontend | React + TypeScript + Vite + Tailwind |
+| Observability | OpenTelemetry → Dynatrace (infra + AI/LLM) |
+| Infra | Terraform → Azure Container Apps, Static Web Apps, Key Vault, ACR |
+| CI/CD | GitHub Actions (lint-test → build → deploy) |
+| Tests | pytest (55 backend) + Vitest (38 frontend) |
+
+## Engineering highlights
+
+- **Resilience as a first-class feature** — a full failure matrix (source timeout, partial data, zero retrieval, dual failure) with pure, exhaustively-tested routing and confidence functions.
+- **GenAI observability** — LLM calls emit OpenTelemetry GenAI-convention spans (model, token usage, derived cost) instead of hardcoded UI numbers — real, queryable telemetry.
+- **Testable by design** — business logic mocked at the boundary; pipeline integration tests run with no cloud credentials.
+- **Reproducible infra** — remote-state Terraform, secrets in Key Vault via managed identity, one-command deploy.
+
+## Running locally
+
+```bash
+# Backend
+cd backend && uv sync && uv run uvicorn api:app --reload     # needs backend/.env (see .env.example)
+# Frontend
+cd frontend && npm install && npm run dev
+```
+
+Tests:
+```bash
+cd backend && uv run pytest          # 55 tests
+cd frontend && npx vitest run        # 38 tests
+```
+
+---
 
 ## Infrastructure
 
