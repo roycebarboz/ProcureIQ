@@ -1,0 +1,7 @@
+# Terraform remote state backend config (local dev).
+# Copy to backend.hcl and run:  terraform init -backend-config=backend.hcl
+# These must match the manually-bootstrapped state Storage Account.
+resource_group_name  = "rg-procureiq-tfstate"
+storage_account_name = "stprocureiqtfstate"
+container_name       = "tfstate"
+key                  = "procureiq.terraform.tfstate"

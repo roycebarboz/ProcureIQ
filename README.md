@@ -43,9 +43,11 @@ cd infra
 
 # Copy and edit the vars file
 cp terraform.tfvars.example terraform.tfvars
-# Set subscription_id in terraform.tfvars
+# Set subscription_id (and dynatrace_env_url) in terraform.tfvars
 
-terraform init
+# Remote state uses a partial backend — supply state config at init:
+cp backend.hcl.example backend.hcl
+terraform init -backend-config=backend.hcl
 terraform plan
 terraform apply
 ```
@@ -74,3 +76,27 @@ terraform apply
 | `environment` | `prod` | Deployment environment |
 | `openai_gpt4o_capacity` | `30` | gpt-4o TPM (thousands) |
 | `openai_embedding_capacity` | `120` | embedding TPM (thousands) |
+| `dynatrace_env_url` | `""` | Dynatrace environment URL for OTLP (no trailing slash) |
+
+## CI/CD
+
+`.github/workflows/ci.yml` runs three jobs on push to `main` (PRs run lint/test/build only):
+
+1. **lint-test** — `ruff check` + `pytest` on `backend/`. Any failure blocks the rest.
+2. **build** — `docker build ./backend` → push to ACR (tags: commit SHA + `latest`).
+3. **deploy** — `terraform apply` (idempotent infra) + `az containerapp update` (rolls out the new image).
+
+### Required GitHub secrets
+
+| Secret | Purpose |
+|---|---|
+| `AZURE_CREDENTIALS` | Service-principal JSON for `azure/login` (ACR push, Terraform, Container App update) |
+| `ACR_LOGIN_SERVER` | e.g. `crprocureiqprod.azurecr.io` |
+| `ARM_SUBSCRIPTION_ID` | Azure subscription ID → `TF_VAR_subscription_id` |
+| `DT_ENV_URL` | Dynatrace env URL → `TF_VAR_dynatrace_env_url` |
+| `TF_BACKEND_RESOURCE_GROUP` | Terraform remote-state resource group |
+| `TF_BACKEND_STORAGE_ACCOUNT` | Terraform remote-state storage account |
+| `TF_BACKEND_CONTAINER` | Terraform remote-state blob container |
+| `TF_BACKEND_KEY` | Terraform remote-state key (blob name) |
+
+> The Dynatrace **ingest token** (`dynatrace-api-token`) lives in Key Vault, not GitHub — the Container App reads it at runtime via managed identity.

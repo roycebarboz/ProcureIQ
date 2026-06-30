@@ -25,6 +25,7 @@ frontend/dist/
 .terraform.lock.hcl
 infra/terraform.tfvars
 infra/tfplan.out
+infra/backend.hcl
 
 # OS
 .DS_Store
