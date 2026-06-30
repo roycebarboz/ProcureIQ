@@ -1,4 +1,5 @@
 import json
+from contextlib import contextmanager
 from unittest.mock import AsyncMock, patch
 
 import pytest
@@ -15,6 +16,27 @@ async def client():
         yield c
 
 
+@contextmanager
+def mocked_pipeline():
+    """Patch all three external calls so /assess runs without real credentials."""
+    mock_llm = {"risk_score": 3, "recommendation": "Approve", "risk_brief": "Low risk."}
+    with (
+        patch(
+            "agents.market_scout.tavily_search",
+            new=AsyncMock(return_value=[{"content": "ok", "score": 0.9}]),
+        ),
+        patch(
+            "agents.policy_librarian.search_policy_chunks",
+            new=AsyncMock(return_value=[{"chunk_text": "ok", "score": 0.8, "source_doc": "doc"}]),
+        ),
+        patch(
+            "agents.risk_synthesizer._call_llm",
+            new=AsyncMock(return_value=(mock_llm, 0, 0)),
+        ),
+    ):
+        yield
+
+
 async def test_health_returns_ok(client):
     r = await client.get("/health")
     assert r.status_code == 200
@@ -22,24 +44,26 @@ async def test_health_returns_ok(client):
 
 
 async def test_post_assess_returns_event_stream(client):
-    async with client.stream(
-        "POST", "/assess", json={"vendor_name": "Acme", "category": "IT Services"}
-    ) as r:
-        assert r.status_code == 200
-        assert "text/event-stream" in r.headers["content-type"]
+    with mocked_pipeline():
+        async with client.stream(
+            "POST", "/assess", json={"vendor_name": "Acme", "category": "IT Services"}
+        ) as r:
+            assert r.status_code == 200
+            assert "text/event-stream" in r.headers["content-type"]
 
 
 async def _collect_events(client, payload: dict) -> list[dict]:
     events, current = [], {}
-    async with client.stream("POST", "/assess", json=payload) as r:
-        async for line in r.aiter_lines():
-            if line.startswith("event:"):
-                current["event"] = line[6:].strip()
-            elif line.startswith("data:"):
-                current["data"] = json.loads(line[5:].strip())
-            elif line == "" and current:
-                events.append(current)
-                current = {}
+    with mocked_pipeline():
+        async with client.stream("POST", "/assess", json=payload) as r:
+            async for line in r.aiter_lines():
+                if line.startswith("event:"):
+                    current["event"] = line[6:].strip()
+                elif line.startswith("data:"):
+                    current["data"] = json.loads(line[5:].strip())
+                elif line == "" and current:
+                    events.append(current)
+                    current = {}
     return events
 
 
